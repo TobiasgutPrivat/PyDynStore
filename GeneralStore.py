@@ -12,12 +12,16 @@ def _pds_load(self):
     if self._pds_id is None:
         return
     if not self._pds_loaded:
-        self._obj = getObject(self._pds_id)
+        data = getObject(self._pds_id)
+        self.__dict__ = data["dict"] + {"_pds_id": self._pds_id}
+        self.items().update(data["items"])
         self._pds_loaded = True
 
 def _pds_unload(self):
+    """Unloads by deleting object data (doesn't save)"""
     if self._pds_loaded:
         self.__dict__ = {"_pds_id": self._pds_id} if hasattr(self, "_pds_id") else {} # keep id for loading
+        self.items().clear()
         self._pds_loaded = False
 
 def _pds_save(self, customId=None):
