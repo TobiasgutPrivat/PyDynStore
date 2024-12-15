@@ -24,7 +24,7 @@ def _pds_unload(self):
         self.items().clear()
         self._pds_loaded = False
 
-def _pds_save(self, customId=None):
+def _pds_save(self, customId: str = None):
     if not self._pds_loaded: # no need to save if not loaded (also avoids recursion)
         return
 
@@ -70,3 +70,9 @@ def extendGlobalObjectPDS():
     object._pds_unload = _pds_unload
     object._pds_save = _pds_save
     object._pds_untrack = _pds_untrack
+
+def loadObjectPDS(id: str, type: type) -> object:
+    object = type()
+    object._pds_id = id
+    object._pds_loaded = False
+    return object
